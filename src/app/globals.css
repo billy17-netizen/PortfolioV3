@@ -1,26 +1,576 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Neo-brutalist colorful palette - Enhanced */
+  --background: #f4f1eb; /* Slightly more neutral background */
+  --foreground: #000000;
+  --primary: #ff3e3e;    /* Vibrant red */
+  --secondary: #4b00ff;  /* Deep purple */
+  --accent: #ffde59;     /* Bright yellow */
+  --tertiary: #00d5c8;   /* Teal */
+  --quaternary: #ff79c6; /* Pink */
+  --neutral: #e6e6e6;
+  --shadow: rgba(0, 0, 0, 0.75); /* Darker shadow for more contrast */
+  
+  /* Gradient background colors */
+  --gradient-1: linear-gradient(135deg, #ffde59 0%, #ff3e3e 100%);
+  --gradient-2: linear-gradient(135deg, #00d5c8 0%, #4b00ff 100%);
+  --gradient-3: linear-gradient(135deg, #ff79c6 0%, #ffde59 100%);
+  
+  /* Font variables */
+  --font-heading: var(--font-bebas-neue);
+  --font-title: var(--font-anton);
+  --font-statement: var(--font-archivo-black);
+  --font-body: var(--font-lexend-mega);
+  --font-ui: var(--font-public-sans);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-tertiary: var(--tertiary);
+  --color-quaternary: var(--quaternary);
+  --color-neutral: var(--neutral);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1a1a1a; /* Slightly lighter for better contrast */
+    --foreground: #ffffff;
+    --primary: #ff5252;
+    --secondary: #7c5dff; /* More vibrant purple */
+    --accent: #ffe066;
+    --tertiary: #00e6d6;
+    --quaternary: #ff8ad3;
+    --neutral: #2a2a2a;
   }
 }
 
+@layer base {
+  * {
+    @apply box-border;
+}
+
 body {
-  background: var(--background);
+    background-color: var(--background);
+    background-image: 
+      radial-gradient(var(--neutral) 1px, transparent 1px),
+      radial-gradient(var(--neutral) 1px, var(--background) 1px);
+    background-size: 50px 50px;
+    background-position: 0 0, 25px 25px;
+    background-attachment: fixed;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-public-sans);
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: -1;
+    pointer-events: none;
+  }
+  
+  h1, h2, h3 {
+    font-family: var(--font-bebas-neue);
+    letter-spacing: 1px;
+  }
+  
+  h4, h5 {
+    font-family: var(--font-anton);
+  }
+  
+  button, .button, a.neo-button {
+    font-family: var(--font-archivo-black);
+  }
+  
+  p, li, input, textarea {
+    font-family: var(--font-public-sans);
+  }
+  
+  code, pre {
+    font-family: monospace;
+  }
+}
+
+/* Neo-brutalist utility classes */
+.neo-box {
+  @apply border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white;
+}
+
+.neo-box-hover {
+  @apply transition-all duration-300 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-4px] hover:translate-y-[-4px];
+}
+
+.neo-button {
+  @apply px-6 py-3 border-4 border-black font-bold shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300;
+}
+
+.neo-button:hover {
+  @apply shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] translate-x-[-3px] translate-y-[-3px];
+}
+
+.neo-button:active {
+  @apply shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] translate-x-[5px] translate-y-[5px];
+}
+
+.neo-input {
+  @apply border-4 border-black p-3 bg-white;
+}
+
+.neo-title {
+  font-family: var(--font-bebas-neue) !important;
+  @apply font-black text-5xl sm:text-6xl md:text-7xl tracking-wide;
+}
+
+.neo-statement {
+  font-family: var(--font-archivo-black) !important;
+  @apply text-2xl sm:text-3xl font-bold;
+}
+
+.neo-subtitle {
+  font-family: var(--font-anton) !important;
+  @apply text-xl sm:text-2xl font-bold;
+}
+
+.neo-body {
+  font-family: var(--font-lexend-mega) !important;
+  @apply text-base sm:text-lg;
+}
+
+.font-heading {
+  font-family: var(--font-bebas-neue) !important;
+}
+
+.font-title {
+  font-family: var(--font-anton) !important;
+}
+
+.font-statement {
+  font-family: var(--font-archivo-black) !important;
+}
+
+.font-body {
+  font-family: var(--font-lexend-mega) !important;
+}
+
+.font-ui {
+  font-family: var(--font-public-sans) !important;
+}
+
+/* Enhanced pattern styles */
+.diagonal-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--accent),
+    var(--accent) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  opacity: 0.7;
+}
+
+.dotted-pattern {
+  background-image: radial-gradient(
+    var(--tertiary) 15%, 
+    transparent 16%
+  );
+  background-size: 20px 20px;
+  opacity: 0.6;
+}
+
+.zigzag-pattern {
+  background-image: 
+    linear-gradient(135deg, var(--quaternary) 25%, transparent 25%),
+    linear-gradient(225deg, var(--quaternary) 25%, transparent 25%),
+    linear-gradient(315deg, var(--quaternary) 25%, transparent 25%),
+    linear-gradient(45deg, var(--quaternary) 25%, transparent 25%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
+  opacity: 0.6;
+}
+
+.wavy-pattern {
+  background-image: 
+    linear-gradient(to right, var(--secondary), var(--secondary) 5px, transparent 5px, transparent 10px),
+    linear-gradient(to bottom, var(--primary), var(--primary) 5px, transparent 5px, transparent 10px);
+  background-size: 10px 10px;
+  opacity: 0.6;
+}
+
+/* New enhanced patterns */
+.grid-pattern {
+  background-image:
+    linear-gradient(to right, var(--neutral) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--neutral) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.4;
+}
+
+.cross-pattern {
+  background: 
+    radial-gradient(circle, transparent 20%, var(--background) 20%, var(--background) 80%, transparent 80%, transparent),
+    radial-gradient(circle, transparent 20%, var(--background) 20%, var(--background) 80%, transparent 80%, transparent) 50px 50px,
+    linear-gradient(var(--tertiary) 4px, transparent 4px) 0 -2px,
+    linear-gradient(90deg, var(--tertiary) 4px, transparent 4px) -2px 0;
+  background-size: 100px 100px, 100px 100px, 50px 50px, 50px 50px;
+  opacity: 0.2;
+}
+
+.confetti-pattern {
+  background-image: 
+    radial-gradient(var(--primary) 5px, transparent 5px),
+    radial-gradient(var(--secondary) 4px, transparent 4px),
+    radial-gradient(var(--accent) 3px, transparent 3px),
+    radial-gradient(var(--tertiary) 2px, transparent 2px),
+    radial-gradient(var(--quaternary) 4px, transparent 4px);
+  background-size: 
+    600px 600px, 
+    500px 500px, 
+    400px 400px, 
+    300px 300px, 
+    200px 200px;
+  background-position: 
+    0px 0px, 
+    40px 60px, 
+    80px 120px, 
+    120px 180px, 
+    140px 240px;
+  opacity: 0.3;
+}
+
+.gradient-overlay {
+  background: var(--gradient-1);
+  opacity: 0.05;
+}
+
+/* Color block utility classes */
+.color-block-1 {
+  background-color: var(--accent);
+}
+
+.color-block-2 {
+  background-color: var(--tertiary);
+}
+
+.color-block-3 {
+  background-color: var(--quaternary);
+}
+
+.color-block-4 {
+  background-color: var(--secondary);
+}
+
+.color-block-5 {
+  background-color: var(--primary);
+}
+
+.gradient-1 {
+  background: var(--gradient-1);
+}
+
+.gradient-2 {
+  background: var(--gradient-2);
+}
+
+.gradient-3 {
+  background: var(--gradient-3);
+}
+
+/* Custom cursor styles for interactive elements */
+body {
+  /* Remove the line that sets cursor to none */
+}
+
+/* Custom interactive element styles */
+.custom-cursor-interactive {
+  /* Remove the line that sets cursor to none */
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-cursor-interactive:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+}
+
+.custom-cursor-interactive:active {
+  transform: translateY(1px) scale(0.99);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Neo-cursor element animations */
+.neo-cursor-element {
+  animation: rotate-neo-cursor 8s infinite linear;
+}
+
+@keyframes rotate-neo-cursor {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Modal animations for project images - OPENING */
+@keyframes modal-in {
+  0% {
+    transform: scale(0.8) rotate(-3deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05) rotate(2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes image-enter {
+  0% {
+    transform: scale(0.8) translateY(30px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05) translateY(-10px) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes backdrop-fade-in {
+  0% {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+  }
+}
+
+@keyframes button-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal animations for project images - CLOSING (reverse of opening) */
+@keyframes modal-out {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05) rotate(2deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0.8) rotate(-3deg);
+    opacity: 0;
+  }
+}
+
+@keyframes image-exit {
+  0% {
+    transform: scale(1) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.05) translateY(-10px) rotate(2deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.8) translateY(30px) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+@keyframes backdrop-fade-out {
+  0% {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+  }
+}
+
+@keyframes button-exit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Animation Classes */
+.animate-modal-in {
+  animation: modal-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-modal-out {
+  animation: modal-out 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important;
+}
+
+.animate-image-in {
+  animation: image-enter 0.7s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.5) both;
+}
+
+.animate-image-out {
+  animation: image-exit 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important;
+}
+
+.animate-backdrop-in {
+  animation: backdrop-fade-in 0.5s forwards;
+}
+
+.animate-backdrop-out {
+  animation: backdrop-fade-out 0.5s forwards !important;
+}
+
+.animate-button-in {
+  animation: button-enter 0.5s 0.4s forwards;
+}
+
+.animate-button-out {
+  animation: button-exit 0.3s forwards !important;
+}
+
+/* Mobile layout fixes */
+@media (max-width: 768px) {
+  body {
+    /* Reduce the background pattern size on mobile */
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+  
+  /* Reduce padding and margin on mobile */
+  .container, section, header, footer {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Adjust text sizes for mobile */
+  .neo-title {
+    font-size: 2.5rem !important;
+    line-height: 1.1 !important;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.8) !important;
+  }
+  
+  .neo-statement {
+    font-size: 1.5rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 1rem;
+  }
+  
+  /* Improve text visibility on mobile */
+  .text-white {
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+  }
+  
+  /* Enhance colored text visibility */
+  p span[class*="text-[var"] {
+    background-color: rgba(0,0,0,0.2);
+    padding: 0 4px;
+    border-radius: 2px;
+    font-weight: bold;
+  }
+  
+  .neo-body {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    font-weight: 500;
+  }
+  
+  /* Adjust buttons for mobile */
+  .neo-button {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Fix rainbow cursor for touch devices */
+  html.touch-device * {
+    cursor: auto !important;
+  }
+  
+  /* Adjust card layouts for mobile */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Fix any position: fixed elements that might cause layout issues */
+  .fixed {
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+  
+  /* Fix for overflow issues in flex containers */
+  .flex {
+    flex-wrap: wrap !important;
+  }
+  
+  /* Improve mobile menu display */
+  .mobile-menu a {
+    font-size: 1.25rem !important;
+    text-align: center !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Improve skill tag visibility */
+  .skill-tag {
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7) !important;
+    font-size: 0.9rem !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  /* Project cards adjustments */
+  .border-l-4.border-black {
+    background-color: #f8f8f8 !important;
+    border-left-width: 6px !important;
+  }
+  
+  /* Enhance contrast for all colored text */
+  [class*="text-[var"] {
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  }
+}
+
+/* Enhance visibility for all text, especially on mobile */
+.text-white, 
+.text-black, 
+p, 
+h1, h2, h3, h4, h5, h6 {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
