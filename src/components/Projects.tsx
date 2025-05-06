@@ -24,7 +24,7 @@ const PROJECTS = [
   {
     title: 'Orfarm',
     description: 'Our e-commerce platform offers a wide range of products, including fresh food, snacks, and drinks, with a simple and user-friendly interface. Built with Laravel and integrated with Midtrans, it provides a secure and convenient shopping experience.',
-    image: '/project-section/orfarm.png',  
+    image: '/project-section/Orfarm.png',  
     tags: ['Laravel', 'Bootstrap', 'MySQL'],
     githubUrl: '-',
     liveUrl: '-',
@@ -33,7 +33,7 @@ const PROJECTS = [
   {
     title: 'Dodobus',
     description: 'DodoBuss is a modern, user-friendly bus ticket booking platform built with Next.js. The application streamlines the process of searching, booking, and managing bus tickets for travelers while providing robust management tools for bus operators.',
-    image: '/project-section/dodobus.png',
+    image: '/project-section/Dodobus.png',
     tags: ['Next.js', 'TailwindCSS', 'Framer Motion', 'Redux/Context API',  'PostgreSQL', 'Prisma ORM'],
     githubUrl: 'https://github.com/billy17-netizen/DodoBuss',
     liveUrl: '-',
