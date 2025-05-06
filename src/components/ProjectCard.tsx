@@ -18,7 +18,6 @@ export interface ProjectProps {
   githubUrl?: string;
   reverse?: boolean;
   color?: string;
-  index?: number;
 }
 
 const ProjectCard = ({
@@ -30,22 +29,25 @@ const ProjectCard = ({
   githubUrl,
   reverse = false,
   color = 'var(--accent)',
-  index = 0
 }: ProjectProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    if (cardRef.current) {
+    const imageContainer = imageRef.current;
+    const card = cardRef.current; // Assuming cardRef is used for ScrollTrigger
+    let hoverTl: gsap.core.Timeline | null = null;
+
+    if (card) {
       // Main card animation
-      gsap.fromTo(cardRef.current,
+      gsap.fromTo(card,
         { opacity: 0, y: 20 },
         { 
           opacity: 1, 
           y: 0, 
           duration: 0.6,
           scrollTrigger: {
-            trigger: cardRef.current,
+            trigger: card,
             start: "top bottom-=100px",
             toggleActions: "play none none none"
           }
@@ -53,7 +55,7 @@ const ProjectCard = ({
       );
       
       // Animate content elements with stagger
-      const contentElements = cardRef.current.querySelectorAll('.animate-item');
+      const contentElements = card.querySelectorAll('.animate-item');
       gsap.fromTo(contentElements,
         { opacity: 0, y: 15 },
         {
@@ -63,7 +65,7 @@ const ProjectCard = ({
           stagger: 0.1,
           delay: 0.2,
           scrollTrigger: {
-            trigger: cardRef.current,
+            trigger: card,
             start: "top bottom-=50px",
           }
         }
@@ -71,27 +73,40 @@ const ProjectCard = ({
     }
     
     // Image hover effect setup
-    if (imageRef.current) {
-      const image = imageRef.current.querySelector('img');
+    const handleMouseEnter = () => hoverTl?.play();
+    const handleMouseLeave = () => hoverTl?.reverse();
+
+    if (imageContainer) {
+      const image = imageContainer.querySelector('img');
       
       if (image) {
-        // Create hover animation for the image
-        const hoverTl = gsap.timeline({ paused: true });
+        hoverTl = gsap.timeline({ paused: true });
         hoverTl.to(image, { scale: 1.05, duration: 0.5, ease: "power1.out" });
         
-        // Add event listeners
-        imageRef.current.addEventListener('mouseenter', () => hoverTl.play());
-        imageRef.current.addEventListener('mouseleave', () => hoverTl.reverse());
+        imageContainer.addEventListener('mouseenter', handleMouseEnter);
+        imageContainer.addEventListener('mouseleave', handleMouseLeave);
       }
     }
     
     return () => {
-      // Clean up
-      if (imageRef.current) {
-        const imageContainer = imageRef.current;
-        imageContainer.removeEventListener('mouseenter', () => {});
-        imageContainer.removeEventListener('mouseleave', () => {});
+      // Clean up event listeners
+      if (imageContainer) {
+        imageContainer.removeEventListener('mouseenter', handleMouseEnter);
+        imageContainer.removeEventListener('mouseleave', handleMouseLeave);
       }
+      // Kill GSAP tweens
+      if (hoverTl) hoverTl.kill();
+      if (card) {
+          gsap.killTweensOf(card);
+          const contentElements = card.querySelectorAll('.animate-item');
+          gsap.killTweensOf(contentElements);
+      }
+      // Clean up ScrollTriggers associated with this card
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.vars.trigger === card) {
+          // st.kill(); // Consider killing specific triggers
+        }
+      });
     };
   }, []);
   

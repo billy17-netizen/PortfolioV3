@@ -1,9 +1,18 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
+
+// Define Particle class outside the component
+class Particle {
+  position: { x: number; y: number };
+
+  constructor(x: number, y: number) {
+    this.position = { x, y };
+  }
+}
 
 interface RainbowCursorProps {
-  element?: HTMLElement;
+  // element?: HTMLElement;
   length?: number;
   colors?: string[];
   size?: number;
@@ -16,7 +25,7 @@ interface RainbowCursorProps {
 }
 
 const RainbowCursor: React.FC<RainbowCursorProps> = ({
-  element,
+  // element,
   length = 20,
   colors = ['#FE0000', '#FD8C00', '#FFE500', '#119F0B', '#0644B3', '#C22EDC'],
   size = 3,
@@ -36,14 +45,6 @@ const RainbowCursor: React.FC<RainbowCursorProps> = ({
   const animationFrameRef = useRef<number>(0);
   const cursorsInittedRef = useRef(false);
   const timeRef = useRef(0);
-
-  class Particle {
-    position: { x: number; y: number };
-
-    constructor(x: number, y: number) {
-      this.position = { x, y };
-    }
-  }
 
   // Helper function to interpolate between colors
   const interpolateColors = (
@@ -66,28 +67,29 @@ const RainbowCursor: React.FC<RainbowCursorProps> = ({
     return `rgb(${r}, ${g}, ${b})`;
   };
 
-  // Function to get dynamic size based on pulse
-  const getPulseSize = (baseSize: number, time: number) => {
+  // Wrap getPulseSize in useCallback
+  const getPulseSize = useCallback((baseSize: number, time: number) => {
     const pulse = Math.sin(time * pulseSpeed);
     const scaleFactor = pulseMin + ((pulse + 1) * (pulseMax - pulseMin)) / 2;
     return baseSize * scaleFactor;
-  };
+  }, [pulseSpeed, pulseMin, pulseMax]);
 
-  // Initialize particles
-  const initializeParticles = (x: number, y: number) => {
+  // Wrap initializeParticles in useCallback
+  const initializeParticles = useCallback((x: number, y: number) => {
     if (cursorsInittedRef.current) return;
     
     cursorsInittedRef.current = true;
     particlesRef.current = [];
     
     for (let i = 0; i < length; i++) {
+      // Use the globally defined Particle class
       particlesRef.current.push(new Particle(x, y));
     }
-  };
+  }, [length]);
 
   useEffect(() => {
-    // Always use document.body for consistent behavior
-    const targetElement = document.body;
+    // Remove targetElement as it defaults to document.body
+    // const targetElement = document.body;
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
@@ -118,7 +120,7 @@ const RainbowCursor: React.FC<RainbowCursorProps> = ({
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Initialize particles with center position
+    // Initialize particles (now calling the memoized version)
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     initializeParticles(centerX, centerY);
@@ -235,7 +237,6 @@ const RainbowCursor: React.FC<RainbowCursorProps> = ({
       window.removeEventListener('resize', onWindowResize);
     };
   }, [
-    element,
     length,
     colors,
     size,
@@ -245,6 +246,8 @@ const RainbowCursor: React.FC<RainbowCursorProps> = ({
     pulseSpeed,
     pulseMin,
     pulseMax,
+    initializeParticles, // Dependency is now stable
+    getPulseSize         // Dependency is now stable
   ]);
 
   return null;

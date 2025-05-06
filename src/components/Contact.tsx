@@ -80,6 +80,10 @@ const Contact = () => {
   };
 
   useEffect(() => {
+    const square = squareRef.current;
+    const circle = circleRef.current;
+    const wavy = wavyRef.current;
+
     // Title animation with 3D effect
     if (titleRef.current) {
       gsap.fromTo(titleRef.current,
@@ -181,8 +185,8 @@ const Contact = () => {
     }
 
     // Decorative elements animations
-    if (squareRef.current) {
-      gsap.to(squareRef.current, {
+    if (square) {
+      gsap.to(square, {
         rotation: 20,
         y: -10,
         duration: 8,
@@ -192,8 +196,8 @@ const Contact = () => {
       });
     }
     
-    if (circleRef.current) {
-      gsap.to(circleRef.current, {
+    if (circle) {
+      gsap.to(circle, {
         scale: 1.1,
         duration: 5,
         repeat: -1,
@@ -202,8 +206,8 @@ const Contact = () => {
       });
     }
     
-    if (wavyRef.current) {
-      gsap.to(wavyRef.current, {
+    if (wavy) {
+      gsap.to(wavy, {
         rotation: 10,
         duration: 10,
         repeat: -1,
@@ -212,12 +216,13 @@ const Contact = () => {
       });
     }
 
-    // Cleanup function to kill all animations and ScrollTriggers when component unmounts
+    // Cleanup function
     return () => {
-      if (squareRef.current) gsap.killTweensOf(squareRef.current);
-      if (circleRef.current) gsap.killTweensOf(circleRef.current);
-      if (wavyRef.current) gsap.killTweensOf(wavyRef.current);
-      ScrollTrigger.getAll().forEach(st => st.kill());
+      if (square) gsap.killTweensOf(square);
+      if (circle) gsap.killTweensOf(circle);
+      if (wavy) gsap.killTweensOf(wavy);
+      // Cleanup other animations/triggers if necessary
+      ScrollTrigger.getAll().forEach(st => st.kill()); // General cleanup
     };
   }, []);
 
@@ -289,7 +294,7 @@ const Contact = () => {
           <h2 className="neo-title relative z-10">GET IN TOUCH</h2>
           <div className="w-40 h-2 bg-[var(--primary)] mt-4"></div>
           <p className="neo-statement mt-6 max-w-2xl">
-            Have a <span className="text-[var(--quaternary)]">project in mind</span> or want to discuss a <span className="text-[var(--tertiary)]">potential collaboration</span>? I'd love to hear from you!
+            Have a <span className="text-[var(--quaternary)]">project in mind</span> or want to discuss a <span className="text-[var(--tertiary)]">potential collaboration</span>? I&apos;d love to hear from you!
           </p>
           
           {/* Decorative element */}
@@ -309,7 +314,7 @@ const Contact = () => {
                 {submitted ? (
                   <div className="neo-box bg-[var(--accent)] p-6 text-center">
                     <p className="font-[var(--font-statement)] text-xl font-bold text-black">Message Sent!</p>
-                    <p className="neo-body mt-2 text-black">Thanks for reaching out. I'll get back to you soon.</p>
+                    <p className="neo-body mt-2 text-black">Thanks for reaching out. I&apos;ll get back to you soon.</p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -361,7 +366,7 @@ const Contact = () => {
                     
                     <div>
                       <label htmlFor="message" className="block font-[var(--font-statement)] mb-2 text-black">Message</label>
-                      <textarea
+                      <textarea // Line 297 starts here
                         id="message"
                         name="message"
                         value={formData.message}
@@ -403,7 +408,7 @@ const Contact = () => {
               <div className="neo-box bg-white p-8">
                 <h3 className="neo-subtitle mb-6 text-black">Contact Information</h3>
                 <p className="neo-body mb-8 text-black">
-                  Feel free to reach out with any questions. I'm available for freelance work, full-time positions, and collaborations.
+                  Feel free to reach out with any questions. I&apos;m available for freelance work, full-time positions, and collaborations.
                 </p>
                 
                 <div className="space-y-6">
@@ -447,7 +452,7 @@ const Contact = () => {
             {/* Let's Connect Card */}
             <div className="neo-box p-1 bg-[var(--secondary)]">
               <div className="neo-box bg-white p-6">
-                <h4 className="font-[var(--font-title)] text-xl mb-4 text-black">Let's Connect</h4>
+                <h4 className="font-[var(--font-title)] text-xl mb-4 text-black">Let&apos;s Connect</h4>
                 <p className="font-[var(--font-ui)] mb-6 text-black">
                   Also available for consultations, tech talks, and mentoring opportunities.
                 </p>

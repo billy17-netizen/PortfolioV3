@@ -56,6 +56,10 @@ const Hero = () => {
   }, []);
   
   useEffect(() => {
+    const floatingBlock1 = floatingBlock1Ref.current;
+    const floatingBlock2 = floatingBlock2Ref.current;
+    const scrollIndicator = scrollIndicatorRef.current;
+    
     // Main timeline for coordinated animations
     const mainTl = gsap.timeline({ defaults: { ease: "power2.out" }});
     
@@ -253,8 +257,8 @@ const Hero = () => {
     }
     
     // Floating blocks animation
-    if (floatingBlock1Ref.current) {
-      gsap.to(floatingBlock1Ref.current, {
+    if (floatingBlock1) {
+      gsap.to(floatingBlock1, {
         y: 15,
         rotate: 10,
         duration: 5,
@@ -264,8 +268,8 @@ const Hero = () => {
       });
     }
     
-    if (floatingBlock2Ref.current) {
-      gsap.to(floatingBlock2Ref.current, {
+    if (floatingBlock2) {
+      gsap.to(floatingBlock2, {
         y: -20,
         x: 15,
         duration: 7,
@@ -276,8 +280,8 @@ const Hero = () => {
     }
     
     // Scroll indicator animation
-    if (scrollIndicatorRef.current) {
-      gsap.to(scrollIndicatorRef.current, {
+    if (scrollIndicator) {
+      gsap.to(scrollIndicator, {
         y: 10,
         duration: 1.5,
         repeat: -1,
@@ -302,9 +306,13 @@ const Hero = () => {
     
     return () => {
       // Cleanup animations when component unmounts
-      if (floatingBlock1Ref.current) gsap.killTweensOf(floatingBlock1Ref.current);
-      if (floatingBlock2Ref.current) gsap.killTweensOf(floatingBlock2Ref.current);
-      if (scrollIndicatorRef.current) gsap.killTweensOf(scrollIndicatorRef.current);
+      if (floatingBlock1) gsap.killTweensOf(floatingBlock1);
+      if (floatingBlock2) gsap.killTweensOf(floatingBlock2);
+      if (scrollIndicator) gsap.killTweensOf(scrollIndicator);
+      // Potentially kill mainTl and other animations
+      // mainTl.kill(); 
+      // Cleanup ScrollTriggers
+      ScrollTrigger.getAll().forEach(st => st.kill()); // General cleanup
     };
   }, []);
   

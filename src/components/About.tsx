@@ -21,6 +21,10 @@ const About = () => {
   const decorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const square = squareRef.current;
+    const circle = circleRef.current;
+    const decor = decorRef.current;
+
     // Title animation with 3D effect
     if (titleRef.current) {
       gsap.fromTo(titleRef.current,
@@ -153,8 +157,8 @@ const About = () => {
     }
 
     // Decorative elements animations
-    if (squareRef.current) {
-      gsap.to(squareRef.current, {
+    if (square) {
+      gsap.to(square, {
         rotation: 15,
         duration: 8,
         repeat: -1,
@@ -163,8 +167,8 @@ const About = () => {
       });
     }
     
-    if (circleRef.current) {
-      gsap.to(circleRef.current, {
+    if (circle) {
+      gsap.to(circle, {
         y: -20,
         duration: 6,
         repeat: -1,
@@ -173,8 +177,8 @@ const About = () => {
       });
     }
     
-    if (decorRef.current) {
-      gsap.to(decorRef.current, {
+    if (decor) {
+      gsap.to(decor, {
         rotation: "12deg",
         duration: 10,
         repeat: -1,
@@ -183,12 +187,13 @@ const About = () => {
       });
     }
 
-    // Cleanup function to kill all animations and ScrollTriggers when component unmounts
+    // Cleanup function
     return () => {
-      if (squareRef.current) gsap.killTweensOf(squareRef.current);
-      if (circleRef.current) gsap.killTweensOf(circleRef.current);
-      if (decorRef.current) gsap.killTweensOf(decorRef.current);
-      ScrollTrigger.getAll().forEach(st => st.kill());
+      if (square) gsap.killTweensOf(square);
+      if (circle) gsap.killTweensOf(circle);
+      if (decor) gsap.killTweensOf(decor);
+      // Cleanup other animations/triggers if necessary
+      ScrollTrigger.getAll().forEach(st => st.kill()); // General cleanup
     };
   }, []);
 
@@ -279,8 +284,8 @@ const About = () => {
           >
             <div className="neo-box p-8 bg-white">
               <h3 className="neo-subtitle text-[var(--secondary)] mb-4 font-bold">Who I Am</h3>
-              <p className="neo-body mb-6 text-black">
-                I'm a <span className="font-statement text-[var(--primary)] font-bold">passionate Fullstack Web Developer</span> with a strong foundation in web technologies and a drive to create meaningful digital experiences.
+              <p className=" neo-body text-lg md:text-xl text-black max-w-3xl mx-auto mb-12 leading-relaxed">
+                Hello! I&apos;m Billstein Maelgweyn Lelatobur, a full-stack developer focused on creating impactful and visually engaging web applications. I thrive on tackling complex challenges and turning ideas into reality through clean code and innovative solutions.
               </p>
               <p className="neo-body mb-6 text-black">
                 I started my web development journey with an internship at a tech company, where I worked on full-stack applications and learned modern frameworks. This experience sparked my passion for creating web solutions and set the foundation for my software development career.              </p>

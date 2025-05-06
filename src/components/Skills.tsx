@@ -39,9 +39,13 @@ const SkillCategory = ({ title, icon, skills, color, pattern }: {
   const titleRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    const card = cardRef.current;
+    const title = titleRef.current;
+    const skillsContainer = skillsRef.current;
+
     // Card animation
-    if (cardRef.current) {
-      gsap.fromTo(cardRef.current, 
+    if (card) {
+      gsap.fromTo(card, 
         { 
           opacity: 0, 
           scale: 0.9, 
@@ -57,7 +61,7 @@ const SkillCategory = ({ title, icon, skills, color, pattern }: {
           rotationX: 0, 
           duration: 0.5,
           scrollTrigger: {
-            trigger: cardRef.current,
+            trigger: card,
             start: "top bottom-=100px",
             end: "top center+=100px",
             scrub: 0.5,
@@ -68,21 +72,24 @@ const SkillCategory = ({ title, icon, skills, color, pattern }: {
     }
     
     // Title shake animation on hover
-    if (titleRef.current) {
-      titleRef.current.addEventListener('mouseenter', () => {
-        gsap.to(titleRef.current, {
+    const handleMouseEnter = () => {
+      if (title) {
+        gsap.to(title, {
           rotation: 2,
           duration: 0.2,
           ease: "power1.inOut",
           yoyo: true,
           repeat: 1
         });
-      });
+      }
+    };
+    if (title) {
+      title.addEventListener('mouseenter', handleMouseEnter);
     }
     
     // Skills tags animation
-    if (skillsRef.current) {
-      const skillTags = skillsRef.current.querySelectorAll('.skill-tag');
+    if (skillsContainer) {
+      const skillTags = skillsContainer.querySelectorAll('.skill-tag');
       gsap.fromTo(skillTags, 
         { opacity: 0, y: 20 },
         { 
@@ -91,7 +98,7 @@ const SkillCategory = ({ title, icon, skills, color, pattern }: {
           duration: 0.3,
           stagger: 0.05,
           scrollTrigger: {
-            trigger: skillsRef.current,
+            trigger: skillsContainer,
             start: "top bottom-=50px",
             end: "top center+=100px",
             scrub: 0.5,
@@ -102,17 +109,25 @@ const SkillCategory = ({ title, icon, skills, color, pattern }: {
     }
     
     return () => {
-      if (titleRef.current) {
-        titleRef.current.removeEventListener('mouseenter', () => {});
+      if (title) {
+        title.removeEventListener('mouseenter', handleMouseEnter);
       }
+      // Kill GSAP tweens associated with elements in this component
+      if (card) gsap.killTweensOf(card);
+      if (title) gsap.killTweensOf(title);
+      if (skillsContainer) {
+          const skillTags = skillsContainer.querySelectorAll('.skill-tag');
+          gsap.killTweensOf(skillTags);
+      }
+      // Consider more targeted ScrollTrigger cleanup if necessary
+      ScrollTrigger.getAll().forEach(st => {
+          if (st.vars.trigger === card || st.vars.trigger === skillsContainer) {
+             // st.kill(); // Potentially kill related triggers
+          }
+      });
     };
-  }, []);
+  }, []); // Empty dependency array seems correct here
 
-  // Generate a lighter version of the color for patterns
-  const getPatternBackground = () => {
-    return `${color}`;
-  };
-  
   // Function to vary skill tag colors
   const getSkillTagColor = (index: number) => {
     const colors = [
@@ -205,9 +220,14 @@ const Skills = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    // Title animation with 3D effect
-    if (titleRef.current) {
-      gsap.fromTo(titleRef.current,
+    const decor1 = decorRef1.current;
+    const decor2 = decorRef2.current;
+    const title = titleRef.current;
+    const grid = gridRef.current;
+
+    // Title animation
+    if (title) {
+      gsap.fromTo(title,
         { 
           opacity: 0, 
           y: 20, 
@@ -221,7 +241,7 @@ const Skills = () => {
           rotationX: 0,
           duration: 0.5,
           scrollTrigger: {
-            trigger: titleRef.current,
+            trigger: title,
             start: "top bottom-=100",
             end: "top center+=100",
             scrub: 0.5,
@@ -231,9 +251,9 @@ const Skills = () => {
       );
     }
     
-    // Grid items staggered animation with 3D rotation
-    if (gridRef.current) {
-      const gridItems = gridRef.current.querySelectorAll('.grid-item');
+    // Grid items animation
+    if (grid) {
+      const gridItems = grid.querySelectorAll('.grid-item');
       gsap.fromTo(gridItems,
         { 
           opacity: 0, 
@@ -251,7 +271,7 @@ const Skills = () => {
           duration: 0.5,
           stagger: 0.2,
           scrollTrigger: {
-            trigger: gridRef.current,
+            trigger: grid,
             start: "top bottom-=50",
             end: "top center+=100",
             scrub: 0.5,
@@ -262,8 +282,8 @@ const Skills = () => {
     }
     
     // Decorative elements animations
-    if (decorRef1.current) {
-      gsap.to(decorRef1.current, {
+    if (decor1) {
+      gsap.to(decor1, {
         rotation: 10,
         duration: 4,
         repeat: -1,
@@ -272,8 +292,8 @@ const Skills = () => {
       });
     }
     
-    if (decorRef2.current) {
-      gsap.to(decorRef2.current, {
+    if (decor2) {
+      gsap.to(decor2, {
         y: 15,
         duration: 2.5,
         repeat: -1,
@@ -282,13 +302,19 @@ const Skills = () => {
       });
     }
     
-    // Cleanup function to kill all animations and ScrollTriggers when component unmounts
+    // Cleanup function
     return () => {
-      if (decorRef1.current) gsap.killTweensOf(decorRef1.current);
-      if (decorRef2.current) gsap.killTweensOf(decorRef2.current);
-      ScrollTrigger.getAll().forEach(st => st.kill());
+      if (decor1) gsap.killTweensOf(decor1);
+      if (decor2) gsap.killTweensOf(decor2);
+      // Kill other tweens if necessary
+      if (title) gsap.killTweensOf(title);
+      if (grid) {
+          const gridItems = grid.querySelectorAll('.grid-item');
+          gsap.killTweensOf(gridItems);
+      }
+      ScrollTrigger.getAll().forEach(st => st.kill()); // General cleanup
     };
-  }, []);
+  }, []); // Empty dependency array seems correct here
 
   return (
     <section ref={sectionRef} id="skills" className="py-20 px-4 sm:px-8 relative overflow-hidden">

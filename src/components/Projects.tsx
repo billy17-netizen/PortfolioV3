@@ -84,7 +84,6 @@ const Projects = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
-  const controlsRef = useRef<HTMLDivElement>(null);
   const shape1Ref = useRef<HTMLDivElement>(null);
   const shape2Ref = useRef<HTMLDivElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -265,6 +264,12 @@ const Projects = () => {
   }, []);
   
   useEffect(() => {
+    const shape1 = shape1Ref.current;
+    const shape2 = shape2Ref.current;
+    const section = sectionRef.current;
+    const projectsContainer = projectsRef.current;
+    const header = headerRef.current; // Store headerRef
+
     // Create an array of all animation elements for better control
     const animateElements = [
       {
@@ -304,14 +309,14 @@ const Projects = () => {
     initProjectAnimations();
     
     // Animated background shapes
-    if (shape1Ref.current) {
+    if (shape1 && section) {
       // Create parallax effect for shape1 when scrolling
-      gsap.to(shape1Ref.current, {
+      gsap.to(shape1, {
         rotation: 15,
         scale: 1.1,
         y: -50,
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: section,
           start: "top bottom",
           end: "bottom top",
           scrub: 1.5, // Smooth parallax effect
@@ -319,7 +324,7 @@ const Projects = () => {
       });
       
       // Also add the hover animation
-      gsap.to(shape1Ref.current, {
+      gsap.to(shape1, {
         rotation: 15,
         scale: 1.1,
         duration: 5,
@@ -329,13 +334,13 @@ const Projects = () => {
       });
     }
     
-    if (shape2Ref.current) {
+    if (shape2 && section) {
       // Create parallax effect for shape2 when scrolling
-      gsap.to(shape2Ref.current, {
+      gsap.to(shape2, {
         y: -80,
         rotation: -15,
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: section,
           start: "top bottom",
           end: "bottom top",
           scrub: 2, // Smoother, delayed effect compared to shape1
@@ -343,7 +348,7 @@ const Projects = () => {
       });
       
       // Also add the hover animation
-      gsap.to(shape2Ref.current, {
+      gsap.to(shape2, {
         y: -30,
         duration: 4,
         repeat: -1,
@@ -360,26 +365,55 @@ const Projects = () => {
     }
     
     // Set up scroll-based animation for the entire section
-    gsap.fromTo(
-      sectionRef.current,
-      { backgroundColor: 'rgba(255, 255, 255, 0)' },
-      {
+    if (section) {
+      gsap.fromTo(section, { backgroundColor: 'rgba(255, 255, 255, 0)' }, {
         backgroundColor: 'rgba(255, 255, 255, 0.02)',
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: section,
           start: "top center",
           end: "bottom center",
           scrub: true,
           toggleActions: "play reverse play reverse"
         }
-      }
-    );
+      });
+    }
+    
+    // Apply header animation
+    if (header) {
+        gsap.fromTo(header, 
+          { opacity: 0, y: 40 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.6,
+            scrollTrigger: {
+              trigger: header,
+              start: "top bottom-=100",
+              end: "bottom top+=100", 
+              toggleActions: "play reverse restart reverse"
+            }
+          }
+        );
+    }
     
     return () => {
       // Cleanup animations
-      if (shape1Ref.current) gsap.killTweensOf(shape1Ref.current);
-      if (shape2Ref.current) gsap.killTweensOf(shape2Ref.current);
-      ScrollTrigger.getAll().forEach(st => st.kill());
+      if (shape1) gsap.killTweensOf(shape1);
+      if (shape2) gsap.killTweensOf(shape2);
+      if (section) gsap.killTweensOf(section);
+      // Cleanup project card animations (more specific is better)
+      if (projectsContainer) {
+        const projectCards = projectsContainer.children;
+        Array.from(projectCards).forEach(card => {
+            gsap.killTweensOf(card);
+            const animatable = card.querySelectorAll('.animate-item');
+            gsap.killTweensOf(animatable);
+        });
+      }
+      // Cleanup header animation
+      if (header) gsap.killTweensOf(header); 
+      
+      ScrollTrigger.getAll().forEach(st => st.kill()); // General cleanup
     };
   }, []);
   
@@ -495,7 +529,7 @@ const Projects = () => {
                   
                   {/* Tags displayed with icons */}
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map((tag, tagIndex) => {
+                    {project.tags.map((tag) => {
                       const bgColor = getTagColor(tag);
                       const textColor = ['#000000', '#FFCA28', '#61DAFB', '#F9A03C', '#38B2AC', '#F0DB4F'].includes(bgColor) ? 'black' : 'white';
                       
