@@ -22,9 +22,9 @@ if (typeof window !== 'undefined') {
 // You can add more projects here
 const PROJECTS = [
   {
-    title: 'Orfarm',
+    title: 'OrFarm',
     description: 'Our e-commerce platform offers a wide range of products, including fresh food, snacks, and drinks, with a simple and user-friendly interface. Built with Laravel and integrated with Midtrans, it provides a secure and convenient shopping experience.',
-    image: '/project-section/Orfarm.png',  
+    image: '/project-section/OrFarm.png',  
     tags: ['Laravel', 'Bootstrap', 'MySQL'],
     githubUrl: '-',
     liveUrl: '-',
