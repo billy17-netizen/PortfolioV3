@@ -265,7 +265,7 @@ const About = () => {
             <div className="neo-box p-3 bg-[var(--quaternary)]">
               <div className="neo-box overflow-hidden">
                 <img 
-                  src="/images/my-photo.jpg" 
+                  src="/images/my-photo.JPG" 
                   alt="Developer Portrait" 
                   className="w-full h-auto"
                 />
