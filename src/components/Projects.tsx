@@ -548,22 +548,22 @@ const Projects = () => {
                   
                   <div className="flex gap-2 mt-4">
                     <div className="w-[36px] h-[36px] border-[1.5px] border-black bg-white flex items-center justify-center" 
-                         onClick={() => window.open(project.githubUrl, '_blank')}
-                         style={{ cursor: 'pointer' }}>
+                         onClick={() => project.githubUrl !== '-' && project.githubUrl ? window.open(project.githubUrl, '_blank') : null}
+                         style={{ cursor: project.githubUrl !== '-' && project.githubUrl ? 'pointer' : 'not-allowed' }}>
                       <GitHubIcon style={{ 
                         fontSize: 22,
-                        color: "#000000", 
+                        color: project.githubUrl !== '-' && project.githubUrl ? "#000000" : "#999999", 
                         display: "block",
                         width: "22px", 
                         height: "22px"
                       }} />
                     </div>
                     <div className="w-[36px] h-[36px] border-[1.5px] border-black bg-[#E05D50] flex items-center justify-center" 
-                         onClick={() => window.open(project.liveUrl, '_blank')}
-                         style={{ cursor: 'pointer' }}>
+                         onClick={() => project.liveUrl !== '-' && project.liveUrl ? window.open(project.liveUrl, '_blank') : null}
+                         style={{ cursor: project.liveUrl !== '-' && project.liveUrl ? 'pointer' : 'not-allowed' }}>
                       <LaunchIcon style={{ 
                         fontSize: 20,
-                        color: "#FFFFFF", 
+                        color: project.liveUrl !== '-' && project.liveUrl ? "#FFFFFF" : "#CCCCCC", 
                         display: "block",
                         width: "20px", 
                         height: "20px"

@@ -29,9 +29,9 @@ A modern portfolio website built with Next.js featuring a neo-brutalist design a
    npm install
    ```
 3. Run the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev
+```
 4. Open [http://localhost:3000](http://localhost:3000) to view the site
 
 ## Design Philosophy

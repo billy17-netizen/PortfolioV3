@@ -137,128 +137,37 @@ const ChatBot = () => {
   ]);
   const [input, setInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
+  const [isError, setIsError] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Function to generate responses based on user input
-  const generateResponse = (query: string): string => {
-    const lowercaseQuery = query.toLowerCase();
+  // Function to generate responses from Gemini API
+  const generateResponse = async (query: string): Promise<string> => {
+    try {
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: query }),
+      });
 
-    // Check for website creator questions
-    if (
-      lowercaseQuery.includes('who made') || 
-      lowercaseQuery.includes('who created') || 
-      lowercaseQuery.includes('who built') || 
-      lowercaseQuery.includes('who designed') ||
-      lowercaseQuery.includes('who make') ||
-      (lowercaseQuery.includes('who') && lowercaseQuery.includes('website'))
-    ) {
-      return "This website was created by Billstein Maelgweyn Lelatobur, a Fullstack Web Developer with expertise in modern web technologies. He designed and built it using a neo-brutalist design approach, featuring interactive elements and clean code architecture. The site showcases his skills in Next.js, React, TypeScript, and various front-end technologies.";
-    }
+      const data = await response.json();
 
-    // Check for greetings
-    if (lowercaseQuery.includes('hello') || lowercaseQuery.includes('hi') || lowercaseQuery === 'hey') {
-      return "Hello! I'm your portfolio assistant. How can I help you today? Feel free to ask about projects, skills, experience, or anything else you'd like to know!";
-    }
-
-    // Information about projects
-    if (lowercaseQuery.includes('project') || lowercaseQuery.includes('work') || lowercaseQuery.includes('portfolio')) {
-      if (lowercaseQuery.includes('orfarm')) {
-        const project = KNOWLEDGE_BASE.projects.find(p => p.name.toLowerCase() === 'orfarm');
-        return `${project?.name}: ${project?.description}\n\nKey highlights:\n${project?.highlights.join('\n')}\n\nTechnologies: ${project?.tech.join(', ')}.\n\nChallenge: ${project?.challenges}`;
-      } else if (lowercaseQuery.includes('dodobus')) {
-        const project = KNOWLEDGE_BASE.projects.find(p => p.name.toLowerCase() === 'dodobus');
-        return `${project?.name}: ${project?.description}\n\nKey highlights:\n${project?.highlights.join('\n')}\n\nTechnologies: ${project?.tech.join(', ')}.\n\nChallenge: ${project?.challenges}`;
-      } else if (lowercaseQuery.includes('tools') || lowercaseQuery.includes('midwife') || lowercaseQuery.includes('bidan')) {
-        const project = KNOWLEDGE_BASE.projects.find(p => p.name.toLowerCase() === 'tools midwife');
-        return `${project?.name}: ${project?.description}\n\nKey highlights:\n${project?.highlights.join('\n')}\n\nTechnologies: ${project?.tech.join(', ')}.\n\nChallenge: ${project?.challenges}`;
-      } else {
-        return "I know about several projects: Orfarm (e-commerce), Dodobus (bus booking), and Tools Midwife. Which one would you like to learn more about?";
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get response');
       }
-    }
 
-    // Information about skills
-    if (lowercaseQuery.includes('skill') || lowercaseQuery.includes('tech') || lowercaseQuery.includes('technology')) {
-      if (lowercaseQuery.includes('frontend') || lowercaseQuery.includes('front-end') || lowercaseQuery.includes('front end')) {
-        return `Frontend skills include: ${KNOWLEDGE_BASE.skills.frontend.join(', ')}.`;
-      } else if (lowercaseQuery.includes('backend') || lowercaseQuery.includes('back-end') || lowercaseQuery.includes('back end')) {
-        return `Backend skills include: ${KNOWLEDGE_BASE.skills.backend.join(', ')}.`;
-      } else if (lowercaseQuery.includes('database') || lowercaseQuery.includes('db')) {
-        return `Database skills include: ${KNOWLEDGE_BASE.skills.database.join(', ')}.`;
-      } else if (lowercaseQuery.includes('devops')) {
-        return `DevOps skills include: ${KNOWLEDGE_BASE.skills.devops.join(', ')}.`;
-      } else if (lowercaseQuery.includes('design')) {
-        return `Design skills include: ${KNOWLEDGE_BASE.skills.design.join(', ')}.`;
-      } else {
-        return `Frontend: ${KNOWLEDGE_BASE.skills.frontend.join(', ')}.\n\nBackend: ${KNOWLEDGE_BASE.skills.backend.join(', ')}.\n\nDatabase: ${KNOWLEDGE_BASE.skills.database.join(', ')}.\n\nDevOps: ${KNOWLEDGE_BASE.skills.devops.join(', ')}.\n\nDesign: ${KNOWLEDGE_BASE.skills.design.join(', ')}.`;
-      }
+      return data.response;
+    } catch (error) {
+      console.error('Error getting response from Gemini:', error);
+      setIsError(true);
+      return "I'm having trouble connecting right now. Please try again later, or ask another question.";
     }
-
-    // Information about experience
-    if (lowercaseQuery.includes('experience') || lowercaseQuery.includes('work history') || lowercaseQuery.includes('job')) {
-      const experience = KNOWLEDGE_BASE.experience.map(job => 
-        `${job.title} at ${job.company} (${job.period}):\n${job.responsibilities.join('\n')}`
-      ).join('\n\n');
-      
-      return `Professional Experience:\n\n${experience}`;
-    }
-
-    // Information about education
-    if (lowercaseQuery.includes('education') || lowercaseQuery.includes('university') || lowercaseQuery.includes('degree') || lowercaseQuery.includes('college')) {
-      return `Education: ${KNOWLEDGE_BASE.education.degree} from ${KNOWLEDGE_BASE.education.institution}, graduated ${KNOWLEDGE_BASE.education.year}.\n\nHighlights:\n${KNOWLEDGE_BASE.education.highlights.join('\n')}`;
-    }
-
-    // Information about person
-    if (lowercaseQuery.includes('about') || lowercaseQuery.includes('who') || lowercaseQuery.includes('developer') || 
-        lowercaseQuery.includes('author') || lowercaseQuery.includes('person') || lowercaseQuery.includes('portfolio owner')) {
-      return `${KNOWLEDGE_BASE.about}\n\nBillstein specializes in creating interactive, visually appealing websites with clean code and optimal performance. His skills include ${KNOWLEDGE_BASE.skills.frontend.slice(0, 5).join(', ')} and ${KNOWLEDGE_BASE.skills.backend.slice(0, 3).join(', ')}.`;
-    }
-
-    // Contact information
-    if (lowercaseQuery.includes('contact') || lowercaseQuery.includes('email') || lowercaseQuery.includes('reach')) {
-      return KNOWLEDGE_BASE.contact;
-    }
-
-    // FAQ
-    if (lowercaseQuery.includes('faq') || lowercaseQuery.includes('frequently asked') || lowercaseQuery.includes('common question')) {
-      return KNOWLEDGE_BASE.faq.map(item => `Q: ${item.question}\nA: ${item.answer}`).join('\n\n');
-    }
-
-    // Specific FAQ matches
-    if (lowercaseQuery.includes('development process') || lowercaseQuery.includes('how do you work')) {
-      return KNOWLEDGE_BASE.faq[0].answer;
-    }
-    if (lowercaseQuery.includes('how long') || lowercaseQuery.includes('timeline') || lowercaseQuery.includes('timeframe')) {
-      return KNOWLEDGE_BASE.faq[1].answer;
-    }
-    if (lowercaseQuery.includes('maintenance') || lowercaseQuery.includes('support')) {
-      return KNOWLEDGE_BASE.faq[2].answer;
-    }
-
-    // Interests
-    if (lowercaseQuery.includes('interest') || lowercaseQuery.includes('hobby') || lowercaseQuery.includes('passion')) {
-      return `Professional interests include: ${KNOWLEDGE_BASE.interests.join(', ')}.`;
-    }
-
-    // Web development topics
-    if (lowercaseQuery.includes('neo brutalism') || lowercaseQuery.includes('brutalist')) {
-      return KNOWLEDGE_BASE.webDevelopment.neoBrutalism;
-    }
-    if (lowercaseQuery.includes('trend') || lowercaseQuery.includes('future') || lowercaseQuery.includes('modern web')) {
-      return `Current web development trends include:\n${KNOWLEDGE_BASE.webDevelopment.trends.join('\n')}`;
-    }
-
-    // Commands or help
-    if (lowercaseQuery.includes('help') || lowercaseQuery.includes('command') || lowercaseQuery.includes('what can you do')) {
-      return "I can tell you about:\n- Projects (Orfarm, Dodobus, Tools Midwife)\n- Skills (frontend, backend, database, etc.)\n- Who created this website\n- Work experience\n- Education background\n- Contact information\n- Development process & FAQs\n- Professional interests\n- Web development topics including neo-brutalism\n\nJust ask me about any of these topics!";
-    }
-
-    // Default response
-    return "I'm not sure about that. You can ask me about projects, skills, experience, education, or how to get in contact. Type 'help' to see what I can help with!";
   };
 
   // Handle submitting a new message
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() === '') return;
 
@@ -275,19 +184,34 @@ const ChatBot = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput(''); // Clear the input field now
     setIsThinking(true);
+    setIsError(false);
 
-    // Add "AI is thinking" message
-    setTimeout(() => {
-      // Generate AI response using the stored input
+    try {
+      // Get response from Gemini API
+      const aiResponseText = await generateResponse(currentInput);
+      
       const aiResponse: Message = {
-        text: generateResponse(currentInput),
+        text: aiResponseText,
         isUser: false,
         timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+      console.error('Error in handleSubmit:', error);
+      
+      // Add error message
+      const errorResponse: Message = {
+        text: "I'm having trouble responding right now. Please try again later.",
+        isUser: false,
+        timestamp: new Date(),
+      };
+      
+      setMessages((prev) => [...prev, errorResponse]);
+      setIsError(true);
+    } finally {
       setIsThinking(false);
-    }, 800);
+    }
   };
 
   // Auto-scroll to the bottom of the chat
@@ -304,33 +228,54 @@ const ChatBot = () => {
 
   return (
     <>
-      {/* Chat button */}
+      {/* Mobile Chat button (only visible on small screens) */}
+      <div className="sm:hidden fixed bottom-3 right-3 z-50 flex justify-end">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-10 h-10 rounded-full bg-[var(--primary)] border-[1px] border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,0.7)] hover:scale-105 transition-transform"
+          style={{ minWidth: "40px", maxWidth: "40px" }}
+          aria-label="Toggle chat"
+        >
+          {isOpen ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Desktop Chat button (only visible on desktop) */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[var(--primary)] border-3 border-black flex items-center justify-center shadow-[5px_5px_0px_0px_rgba(0,0,0,0.8)] z-50 hover:scale-105 transition-transform"
+        className="hidden sm:flex fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[var(--primary)] border-3 border-black items-center justify-center shadow-[5px_5px_0px_0px_rgba(0,0,0,0.8)] z-50 hover:scale-105 transition-transform"
         aria-label="Toggle chat"
       >
         {isOpen ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
         )}
       </button>
 
-      {/* Chat window */}
+      {/* Chat window - Responsive for both mobile and desktop */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-80 sm:w-96 h-[500px] bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] z-50 flex flex-col rounded-md overflow-hidden animate-modal-in">
+        <div className="fixed bottom-[4rem] right-2 sm:bottom-24 sm:right-6 w-[160px] sm:w-[300px] md:w-96 h-[60vh] max-h-[400px] bg-white border-[1px] sm:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,0.7)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] z-50 flex flex-col rounded-md overflow-hidden animate-modal-in">
           {/* Chat header */}
-          <div className="bg-[var(--primary)] p-3 text-white font-bold flex justify-between items-center border-b-4 border-black">
-            <div>Portfolio AI Assistant</div>
+          <div className="bg-[var(--primary)] p-1 sm:p-3 text-white font-bold flex justify-between items-center border-b-[1px] sm:border-b-4 border-black">
+            <div className="text-[10px] sm:text-base">AI Chat</div>
             <button
               onClick={() => setIsOpen(false)}
-              className="w-6 h-6 flex items-center justify-center hover:opacity-80"
+              className="w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center hover:opacity-80"
               aria-label="Close chat"
             >
               ✕
@@ -338,17 +283,17 @@ const ChatBot = () => {
           </div>
 
           {/* Chat messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+          <div className="flex-1 overflow-y-auto p-1 sm:p-3 space-y-1 sm:space-y-3 bg-gray-50">
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] p-3 ${
+                  className={`max-w-[90%] p-0.5 sm:p-2.5 text-[8px] sm:text-sm ${
                     message.isUser
-                      ? 'bg-[var(--tertiary)] border-2 border-black text-black neo-box-chat-user'
-                      : 'bg-white border-2 border-black text-black neo-box-chat-ai'
+                      ? 'bg-[var(--tertiary)] border-[1px] sm:border-2 border-black text-black neo-box-chat-user'
+                      : 'bg-white border-[1px] sm:border-2 border-black text-black neo-box-chat-ai'
                   } rounded-md shadow-md whitespace-pre-line`}
                 >
                   {message.text}
@@ -357,11 +302,11 @@ const ChatBot = () => {
             ))}
             {isThinking && (
               <div className="flex justify-start">
-                <div className="max-w-[80%] p-3 bg-white border-2 border-black text-black neo-box-chat-ai rounded-md shadow-md">
-                  <div className="flex space-x-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                <div className="max-w-[90%] p-0.5 sm:p-2.5 bg-white border-[1px] sm:border-2 border-black text-black neo-box-chat-ai rounded-md shadow-md">
+                  <div className="flex space-x-1">
+                    <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                   </div>
                 </div>
               </div>
@@ -370,26 +315,26 @@ const ChatBot = () => {
           </div>
 
           {/* Chat input */}
-          <form onSubmit={handleSubmit} className="border-t-4 border-black p-3 bg-gray-100">
+          <form onSubmit={handleSubmit} className="border-t-[1px] sm:border-t-4 border-black p-0.5 sm:p-2.5 bg-gray-100">
             <div className="flex items-center">
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask a question..."
-                className="flex-1 p-2 border-2 border-black focus:outline-none text-black"
+                placeholder="Ask..."
+                className="flex-1 p-0.5 text-[8px] sm:text-sm border-[1px] sm:border-2 border-black focus:outline-none text-black"
                 disabled={isThinking}
               />
               <button
                 type="submit"
-                className={`ml-2 p-2 text-black border-2 border-black transform transition-transform active:scale-95 ${
+                className={`ml-0.5 sm:ml-1.5 p-0.5 sm:p-1.5 text-black border-[1px] sm:border-2 border-black transform transition-transform active:scale-95 ${
                   isThinking ? 'bg-gray-300 cursor-not-allowed' : 'bg-[var(--tertiary)] hover:brightness-110'
                 }`}
                 aria-label="Send message"
                 disabled={isThinking}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" className="sm:w-[14px] sm:h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="22" y1="2" x2="11" y2="13"></line>
                   <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>

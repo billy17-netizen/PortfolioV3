@@ -285,10 +285,10 @@ const About = () => {
             <div className="neo-box p-8 bg-white">
               <h3 className="neo-subtitle text-[var(--secondary)] mb-4 font-bold">Who I Am</h3>
               <p className=" neo-body text-lg md:text-xl text-black max-w-3xl mx-auto mb-12 leading-relaxed">
-                Hello! I&apos;m Billstein Maelgweyn Lelatobur, a full-stack developer focused on creating impactful and visually engaging web applications. I thrive on tackling complex challenges and turning ideas into reality through clean code and innovative solutions.
+                Hello! I&apos;m Billstein Maelgweyn Lelatobur, a Full-stack Web Developer focused on creating impactful and visually engaging web applications. I thrive on tackling complex challenges and turning ideas into reality through clean code and innovative solutions.
               </p>
               <p className="neo-body mb-6 text-black">
-                I started my web development journey with an internship at a tech company, where I worked on full-stack applications and learned modern frameworks. This experience sparked my passion for creating web solutions and set the foundation for my software development career.              </p>
+                I started my web development journey with an internship at a tech company, where I worked on Full-stack Web Development applications and learned modern frameworks. This experience sparked my passion for creating web solutions and set the foundation for my software development career.              </p>
               <p className="neo-body text-black">
                 I believe in <span className="font-statement text-[var(--tertiary)] font-bold">clean code</span>, thoughtful architecture, and <span className="font-statement text-[var(--quaternary)] font-bold">purposeful design</span>. My goal is to build applications that not only look great but also perform exceptionally well.
               </p>
