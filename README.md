@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Neo-Brutalist Portfolio
+
+A modern portfolio website built with Next.js featuring a neo-brutalist design aesthetic. This project showcases skills, projects, and contact information with interactive animations and bold visual elements.
+
+## Features
+
+- **Bold Neo-Brutalist Design** - Featuring thick borders, strong drop shadows, and high-contrast elements
+- **Interactive Animations** - GSAP-powered bidirectional scroll animations
+- **Responsive Layout** - Fully responsive across all device sizes
+- **Section Highlights:**
+  - **Skills Section** - Animated skill cards with simultaneous reveal effects
+  - **Projects Showcase** - Project cards with prominent GitHub links
+  - **About Section** - Personal information with 3D perspective animations
+  - **Contact Section** - High-contrast contact cards with clear information display
+
+## Technologies Used
+
+- **Next.js** - React framework for server-rendered applications
+- **TypeScript** - For type-safe code
+- **TailwindCSS** - For styling and responsive design
+- **GSAP & ScrollTrigger** - For advanced scroll-based animations
+- **Font Awesome** - For icons and visual elements
 
 ## Getting Started
 
-First, run the development server:
+1. Clone this repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) to view the site
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Design Philosophy
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This portfolio embraces neo-brutalism principles:
+- **Functionality over form** - Clear presentation of information
+- **Raw, honest presentation** - Bold, unapologetic design elements
+- **High contrast** - Strong visual hierarchy and readability
+- **Interactive elements** - Meaningful animations that enhance user experience
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Animation Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Bidirectional animations that reverse when scrolling upward
+- 3D perspective effects for depth and visual interest
+- Simultaneous element reveals for cohesive section transitions
+- Interactive hover states for brutalist-style elements
 
-## Learn More
+## Customization
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The portfolio is built with component-based architecture for easy customization of:
+- Color schemes
+- Project information
+- Skills and expertise
+- Contact details

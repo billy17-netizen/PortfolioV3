@@ -48,26 +48,24 @@ const PROJECTS = [
     liveUrl: '-',
     color: 'var(--quaternary)'
   },
-  // {
-  //   title: 'AI Powered Chat Bot',
-  //   description: 'An intelligent chatbot leveraging OpenAI GPT models to provide customer support, answer questions, and improve user engagement with conversational AI.',
-  //   image: 'https://placehold.co/600x400/00D5C8/FFFFFF?text=AI+Chatbot',
-  //   tags: ['OpenAI API', 'React', 'Node.js', 'WebSockets'],
-  //   githubUrl: 'https://github.com',
-  //   liveUrl: 'https://example.com',
-  //   category: 'Backend',
-  //   color: 'var(--primary)'
-  // },
-  // {
-  //   title: 'Fitness Tracking App',
-  //   description: 'A mobile-first fitness application that helps users track workouts, set goals, and monitor progress with interactive charts and personalized insights.',
-  //   image: 'https://placehold.co/600x400/FF3E3E/FFFFFF?text=Fitness+App',
-  //   tags: ['React Native', 'GraphQL', 'TypeScript', 'Firebase'],
-  //   githubUrl: 'https://github.com',
-  //   liveUrl: 'https://example.com',
-  //   category: 'Mobile',
-  //   color: 'var(--secondary)'
-  // },
+  {
+    title: 'My Portfolio',
+    description: 'This is my portfolio website, using Next.js and Tailwind CSS. It showcases my projects, skills, and experiences.',
+    image: '/project-section/my-portfolio.png',
+    tags: ['Next.js', 'Tailwind CSS', 'TypeScript', 'GSAP', 'ScrollTrigger'],
+    githubUrl: 'https://github.com/billy17-netizen/PortfolioV3',
+    liveUrl: 'https://billy-portdev-qkrql2n1t-billys-projects-77c1b135.vercel.app/',
+    color: 'var(--primary)'
+  },
+  {
+    title: 'RoastInsting',
+    description: 'RoastInsting is a fun web application that allows users to "roast" Instagram profiles using AI. Users enter an Instagram username, and the app fetches data from Instagram using Apify and generates a humorous roast using Googles Gemini AI.',
+    image: '/project-section/roastinsting.png',
+    tags: ['React', 'Tailwind CSS', 'TypeScript', 'Apify API', 'Gemini AI'],
+    githubUrl: 'https://github.com/billy17-netizen/roastinsting',
+    liveUrl: 'https://roastinsting.vercel.app/',
+    color: 'var(--secondary)'
+  },
   // {
   //   title: 'Portfolio Website Builder',
   //   description: 'A drag-and-drop website builder specifically designed for creative professionals to showcase their portfolio with customizable templates and animations.',
