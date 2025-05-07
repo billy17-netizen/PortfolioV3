@@ -2,123 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 
-// Define the knowledge base for the chatbot
-const KNOWLEDGE_BASE = {
-  projects: [
-    {
-      name: 'Orfarm',
-      description: 'E-commerce platform offering a wide range of products, including fresh food, snacks, and drinks, with a simple and user-friendly interface. Built with Laravel and integrated with Midtrans, it provides a secure and convenient shopping experience.',
-      tech: ['Laravel', 'Bootstrap', 'MySQL'],
-      highlights: [
-        'User-friendly product browsing and filtering',
-        'Secure payment processing with Midtrans integration',
-        'Responsive design for mobile and desktop users',
-        'Admin dashboard for inventory and order management'
-      ],
-      challenges: 'Optimizing the database queries for a smooth shopping experience with thousands of products was challenging but ultimately successful.'
-    },
-    {
-      name: 'Dodobus',
-      description: 'DodoBuss is a modern, user-friendly bus ticket booking platform built with Next.js. The application streamlines the process of searching, booking, and managing bus tickets for travelers while providing robust management tools for bus operators.',
-      tech: ['Next.js', 'TailwindCSS', 'Framer Motion', 'Redux/Context API', 'PostgreSQL', 'Prisma ORM'],
-      highlights: [
-        'Interactive seat selection interface',
-        'Real-time availability updates',
-        'Secure payment processing',
-        'Automated email confirmation system',
-        'Admin dashboard for route management'
-      ],
-      challenges: 'Implementing the real-time seat reservation system to prevent double bookings was complex but critical for the platform.'
-    },
-    {
-      name: 'Tools Midwife',
-      description: 'Tools Bidan is a comprehensive digital platform designed specifically for midwives. It provides various calculators, charts, checklists, and reference tools to assist midwives in their daily professional tasks.',
-      tech: ['Next.js', 'Typescript', 'Tailwind CSS'],
-      highlights: [
-        'Pregnancy due date calculator',
-        'Growth charts for infant development',
-        'Medication dosage calculators',
-        'Printable checklists and forms',
-        'Evidence-based reference materials'
-      ],
-      challenges: 'Ensuring medical accuracy while maintaining an intuitive user interface was our primary focus throughout development.'
-    }
-  ],
-  skills: {
-    frontend: ['React', 'Vue.js', 'Next.js', 'TypeScript', 'JavaScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap', 'Framer Motion', 'GSAP'],
-    backend: ['PHP', 'Laravel', 'Node.js', 'Express', 'Prisma ORM', 'RESTful APIs', 'GraphQL'],
-    database: ['MySQL', 'PostgreSQL', 'MongoDB'],
-    devops: ['Git', 'GitHub', 'CI/CD', 'Docker', 'Vercel', 'Netlify'],
-    design: ['Figma', 'Adobe XD', 'Responsive Design', 'UI/UX Principles']
-  },
-  experience: [
-    {
-      title: 'Senior Fullstack Developer',
-      company: 'Tech Innovations Inc.',
-      period: '2020 - Present',
-      responsibilities: [
-        'Lead developer for e-commerce and SaaS projects',
-        'Mentoring junior developers on best practices',
-        'Implementing CI/CD pipelines for streamlined deployment',
-        'Collaborating with design team on UI/UX improvements'
-      ]
-    },
-    {
-      title: 'Web Developer',
-      company: 'Creative Digital Solutions',
-      period: '2018 - 2020',
-      responsibilities: [
-        'Built responsive websites for small to medium businesses',
-        'Implemented payment processing solutions',
-        'Optimized existing websites for performance and SEO',
-        'Created custom CMS solutions for clients'
-      ]
-    }
-  ],
-  education: {
-    degree: 'Bachelor of Computer Science',
-    institution: 'University of Technology',
-    year: '2018',
-    highlights: [
-      'Graduated with honors',
-      'Specialized in Web Development and Software Engineering',
-      'Led student team projects for local businesses'
-    ]
-  },
-  about: 'Billstein Maelgweyn Lelatobur is a Fullstack Web Developer passionate about crafting beautiful, functional websites with modern technologies. With over 5 years of professional experience, he specializes in creating interactive web applications with clean code and intuitive user experiences. He loves the challenge of solving complex problems and staying current with the latest web development trends and best practices.',
-  contact: "You can get in touch with Billstein through the contact form on the website or via email at billstein@example.com. He's also active on GitHub and LinkedIn, where you can see more of his work and professional background.",
-  faq: [
-    {
-      question: 'What is your development process?',
-      answer: 'I follow an agile approach with iterative development cycles. I start with thorough requirements gathering, create wireframes and prototypes, implement the solution with regular client feedback, and finalize with thorough testing and deployment.'
-    },
-    {
-      question: 'How long does a typical project take?',
-      answer: 'Project timelines vary depending on complexity. A simple website might take 2-4 weeks, while a complex web application could take 2-3 months. I always provide timeline estimates during the initial consultation.'
-    },
-    {
-      question: 'Do you offer maintenance services?',
-      answer: 'Yes, I offer ongoing maintenance packages to ensure your website remains secure, up-to-date, and performing optimally. This includes regular updates, security patches, and minor feature enhancements.'
-    }
-  ],
-  interests: [
-    'Open-source contribution',
-    'Web accessibility advocacy',
-    'UI/UX design principles',
-    'Performance optimization',
-    'Emerging web technologies'
-  ],
-  webDevelopment: {
-    neoBrutalism: 'Neo-brutalism in web design embraces bold colors, high contrast, thick borders, and an intentionally raw aesthetic. It prioritizes usability and functionality while making a strong visual statement.',
-    trends: [
-      'Micro-interactions for enhanced user experience',
-      'WebGL and 3D elements in interfaces',
-      'Dark mode as a standard feature',
-      'Voice user interfaces and accessibility',
-      'AI-powered personalization'
-    ]
-  }
-};
+// Remove or comment out the KNOWLEDGE_BASE definition since we're using Gemini API now
+// const KNOWLEDGE_BASE = { ... };
 
 type Message = {
   text: string;
@@ -283,17 +168,17 @@ const ChatBot = () => {
           </div>
 
           {/* Chat messages */}
-          <div className="flex-1 overflow-y-auto p-1 sm:p-3 space-y-1 sm:space-y-3 bg-gray-50">
+          <div className="flex-1 overflow-y-auto p-1.5 md:p-3 space-y-1.5 md:space-y-3 bg-gray-50">
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[90%] p-0.5 sm:p-2.5 text-[8px] sm:text-sm ${
+                  className={`max-w-[85%] p-1 md:p-2.5 text-[10px] md:text-sm ${
                     message.isUser
-                      ? 'bg-[var(--tertiary)] border-[1px] sm:border-2 border-black text-black neo-box-chat-user'
-                      : 'bg-white border-[1px] sm:border-2 border-black text-black neo-box-chat-ai'
+                      ? 'bg-[var(--tertiary)] border-1 md:border-2 border-black text-black neo-box-chat-user'
+                      : 'bg-white border-1 md:border-2 border-black text-black neo-box-chat-ai'
                   } rounded-md shadow-md whitespace-pre-line`}
                 >
                   {message.text}
@@ -302,13 +187,20 @@ const ChatBot = () => {
             ))}
             {isThinking && (
               <div className="flex justify-start">
-                <div className="max-w-[90%] p-0.5 sm:p-2.5 bg-white border-[1px] sm:border-2 border-black text-black neo-box-chat-ai rounded-md shadow-md">
+                <div className="max-w-[85%] p-1 md:p-2.5 bg-white border-1 md:border-2 border-black text-black neo-box-chat-ai rounded-md shadow-md">
                   <div className="flex space-x-1">
-                    <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    <div className="w-1 h-1 md:w-1.5 md:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-1 h-1 md:w-1.5 md:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-1 h-1 md:w-1.5 md:h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                   </div>
                 </div>
+              </div>
+            )}
+            {isError && (
+              <div className="flex justify-center py-1 md:py-2">
+                <span className="text-[8px] md:text-xs px-1.5 py-0.5 bg-red-100 text-red-800 rounded border border-red-300">
+                  Connection error. Try again later.
+                </span>
               </div>
             )}
             <div ref={messagesEndRef} />
