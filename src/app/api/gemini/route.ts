@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // In a production environment, store the API key using environment variables
 // This is a fallback for demo purposes only
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyCvQ-hkzLWtHwkWfb65uiWxEOWUHHeoIH8";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
 // Create a system prompt that provides context about the portfolio
