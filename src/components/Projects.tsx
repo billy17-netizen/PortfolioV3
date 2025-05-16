@@ -66,16 +66,15 @@ const PROJECTS = [
     liveUrl: 'https://roastinsting.vercel.app/',
     color: 'var(--secondary)'
   },
-  // {
-  //   title: 'Portfolio Website Builder',
-  //   description: 'A drag-and-drop website builder specifically designed for creative professionals to showcase their portfolio with customizable templates and animations.',
-  //   image: 'https://placehold.co/600x400/8A2BE2/FFFFFF?text=Portfolio+Builder',
-  //   tags: ['Vue.js', 'TailwindCSS', 'Firebase', 'Animations'],
-  //   githubUrl: 'https://github.com',
-  //   liveUrl: 'https://example.com',
-  //   category: 'UI/UX',
-  //   color: 'var(--accent)'
-  // }
+  {
+    title: 'PosVougher',
+    description: 'Modern Point of Sale System',
+    image: '/project-section/posvougher.png',
+    tags: ['Next.js', 'TailwindCSS', 'PostgreSQL', 'Prisma ORM', 'NextAuth.js'],
+    githubUrl: 'https://github.com/billy17-netizen/posvougher',
+    liveUrl: '-',
+    color: 'var(--accent)'
+  }
 ];
 
 const Projects = () => {
