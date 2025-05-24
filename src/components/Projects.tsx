@@ -68,10 +68,19 @@ const PROJECTS = [
   },
   {
     title: 'PosVougher',
-    description: 'Modern Point of Sale System',
+    description: 'Modern Point of Sale System with System web design using  Brutalist design',
     image: '/project-section/posvougher.png',
     tags: ['Next.js', 'TailwindCSS', 'PostgreSQL', 'Prisma ORM', 'NextAuth.js'],
     githubUrl: 'https://github.com/billy17-netizen/posvougher',
+    liveUrl: '-',
+    color: 'var(--accent)'
+  },
+  {
+    title: 'Hikari-Shop',
+    description: 'A modern e-commerce platform built with Next.js, PostgreSQL, and Prisma ORM. This project features a complete online shopping experience with secure payment processing via Midtrans gateway.',
+    image: '/project-section/hikari-shop.png',
+    tags: ['Next.js', 'React', 'TailwindCSS', 'Framer Motion', 'Next.js API Routes', 'Prisma ORM', 'PostgreSQL', 'NextAuth.js', 'Midtrans'],
+    githubUrl: 'https://github.com/billy17-netizen/hikari-shop',
     liveUrl: '-',
     color: 'var(--accent)'
   }
